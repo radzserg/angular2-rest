@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,SAAU;EACR,WAAW,EAAE,iBACf;;AAEA,WAAY;EACV,WAAW,EAAE,iBACf",
+"sources": ["user-form.scss"],
+"names": [],
+"file": "user-form.css"
+}

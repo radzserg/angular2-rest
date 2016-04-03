@@ -1,0 +1,28 @@
+<form [ngFormModel]="userForm" novalidate (ngSubmit)="onSubmit()">
+
+  <div class="form-group" [ngClass]="{'has-error': !userForm.controls.first_name.valid}" >
+    <label for="first_name_field">First Name</label>
+    <input type="text" class="form-control" placeholder="First Name" id="first_name_field"
+           ngControl='first_name'  >
+  </div>
+
+  <div class="form-group">
+    <label for="last_name_field">Last Name</label>
+    <input type="text" class="form-control" placeholder="Last Name" id="last_name_field"
+           ngControl="last_name" >
+  </div>
+
+  <div class="form-group">
+    <label for="email_field">Email</label>
+    <input type="email" class="form-control" placeholder="Email" id="email_field"
+           ngControl="email" >
+  </div>
+
+  <div class="form-group">
+    <label for="password_field">Password</label>
+    <input type="password" class="form-control" placeholder="Password" id="password_field"
+           ngControl="password" >
+  </div>
+
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
