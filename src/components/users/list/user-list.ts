@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, OnInit} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Http} from 'angular2/http';
 import {User} from '../../../models/user';
@@ -11,11 +11,13 @@ import {User} from '../../../models/user';
 
   directives: [ROUTER_DIRECTIVES]
 })
-export class UserList {
+export class UserList implements OnInit {
 
   users: User[] = [];
 
-  constructor(private http: Http) {
+  constructor(private http: Http) {}
+
+  ngOnInit() {
     this.http.get('/users')
       .map(res => res.json())
       .subscribe(

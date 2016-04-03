@@ -62,8 +62,18 @@ export class UserFormComponent {
       return ;
     }
 
+    // @todo add helper class to exchange data between ControlGroup and UserModel
+    var userData = {
+      first_name: this.userForm.controls['first_name'].value,
+      last_name: this.userForm.controls['last_name'].value,
+      email: this.userForm.controls['email'].value,
+      password: this.userForm.controls['password'].value,
+    };
+
+    console.log(userData);
+
     if (this.user.id) {
-      this.http.put('/users/' + this.user.id, JSON.stringify({user: this.user.attributes}))
+      this.http.put('/users/' + this.user.id, JSON.stringify({user: userData}))
         .map(res => res.json())
         .subscribe(
           (data) => {
@@ -72,7 +82,7 @@ export class UserFormComponent {
           this.handleError
         );
     } else {
-      this.http.post('/users', JSON.stringify({user: this.user.attributes}))
+      this.http.post('/users', JSON.stringify({user: userData}))
         .map(res => res.json())
         .subscribe(
           (data) => {

@@ -1,6 +1,6 @@
 import {provide, enableProdMode} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
-import {HTTP_PROVIDERS, RequestOptions, Http, XHRBackend} from 'angular2/http';
+import {HTTP_PROVIDERS, RequestOptions, Http, XHRBackend, ConnectionBackend} from 'angular2/http';
 import {ROUTER_PROVIDERS, APP_BASE_HREF} from 'angular2/router';
 import 'rxjs/Rx';
 
@@ -16,7 +16,7 @@ bootstrap(AppComponent, [
   provide(APP_BASE_HREF, { useValue: '/' }),
   provide(RequestOptions, {useClass: AppRequestOptions}) ,
   provide(Http, { useFactory:
-    function(backend, defaultOptions: RequestOptions) {
+    function(backend: ConnectionBackend = null, defaultOptions: RequestOptions) {
       return new Http(backend, defaultOptions); },
     deps: [XHRBackend, RequestOptions]})
 ])
