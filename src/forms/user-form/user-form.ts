@@ -1,10 +1,11 @@
 import {Component, Input} from 'angular2/core';
 import {Http, Response} from 'angular2/http';
 import {Router} from 'angular2/router';
-import {ControlGroup, FormBuilder, Validators, NgClass} from 'angular2/common';
+import {ControlGroup, FormBuilder, Validators, NgClass, Control} from 'angular2/common';
 import {User} from '../../models/user';
 import {AppValidators} from '../../validators';
 import {ControlGroupHelper} from '../ControlGroupHelper';
+import {FieldErrors} from '../../pipes/FieldErrors';
 
 
 @Component({
@@ -12,6 +13,7 @@ import {ControlGroupHelper} from '../ControlGroupHelper';
   moduleId: module.id,
   styleUrls: ['./user-form.css'],
   templateUrl: './user-form.html',
+  pipes: [FieldErrors],
   directives: [NgClass]
 })
 export class UserFormComponent {
@@ -24,7 +26,7 @@ export class UserFormComponent {
       first_name: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       last_name: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       email: ['', Validators.compose([Validators.required, AppValidators.email])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+      password: ['', Validators.compose([Validators.minLength(6)])]
     });
   }
 
@@ -35,8 +37,12 @@ export class UserFormComponent {
    */
   handleError(response: Response) {
     if (response.status === 422) {
-      var errors = response.json();
+      let errors : Object = response.json();
       console.log(errors);
+      for (var field in errors) {
+        var fieldErrors: string[] = (<any>errors)[field];
+        ControlGroupHelper.setControlErrors(this.userForm, field, fieldErrors);
+      }
     }
 
     console.log(response);
@@ -47,6 +53,7 @@ export class UserFormComponent {
     if (user) {
       this.user = user;
       ControlGroupHelper.updateControls(this.userForm, this.user);
+      console.log( (<Control>this.userForm.controls['first_name']).errors);
     }
   }
 
@@ -67,7 +74,9 @@ export class UserFormComponent {
           (data) => {
             this.router.navigate(['UserList']);
           },
-          this.handleError
+          (response: Response) => {
+            this.handleError(response);
+          }
         );
     } else {
       this.http.post('/users', JSON.stringify({user: this.user}))
@@ -76,6 +85,9 @@ export class UserFormComponent {
           (data) => {
             this.user.id = data.id;
             this.router.navigate(['UserList']);
+          },
+          (response: Response) => {
+            this.handleError(response);
           }
         );
     }

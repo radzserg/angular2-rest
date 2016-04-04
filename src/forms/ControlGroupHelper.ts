@@ -19,4 +19,15 @@ export class ControlGroupHelper {
     });
   }
 
+  static setControlErrors(controlGroup: ControlGroup, field: string, errors: string[]) {
+    if (!!controlGroup.controls[field]) {
+      var errorsObject = {};
+      // transform array to object in order to be compatible with angular2 control group errors type
+      for (var i in errors) {
+        (<any>errorsObject)[i] = field + ' ' + errors[i];
+      }
+      (<Control>controlGroup.controls[field]).setErrors(errorsObject, true);
+    }
+  }
+
 }

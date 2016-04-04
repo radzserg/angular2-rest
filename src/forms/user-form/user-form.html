@@ -1,28 +1,48 @@
-<form [ngFormModel]="userForm" novalidate (ngSubmit)="onSubmit()">
+<form [ngFormModel]="userForm" novalidate (ngSubmit)="onSubmit()" class="well">
 
-  <div class="form-group" [ngClass]="{'has-error': !userForm.controls.first_name.valid}" >
-    <label for="first_name_field">First Name</label>
+  <div class="form-group" [ngClass]="{'has-danger': !userForm.controls.first_name.valid}" >
+    <label class="form-control-label" for="first_name_field">First Name</label>
     <input type="text" class="form-control" placeholder="First Name" id="first_name_field"
            ngControl='first_name'  >
+
+    <span class="text-help" *ngIf="!userForm.controls.first_name.valid"
+          *ngFor="#e of userForm.controls.first_name.errors | fieldErrors: 'First Name'" >
+      {{e}}
+    </span>
   </div>
 
-  <div class="form-group">
-    <label for="last_name_field">Last Name</label>
+  <div class="form-group" [ngClass]="{'has-danger': !userForm.controls.last_name.valid}" >
+    <label class="form-control-label" for="last_name_field">Last Name</label>
     <input type="text" class="form-control" placeholder="Last Name" id="last_name_field"
            ngControl="last_name" >
+
+    <span class="text-help" *ngIf="!userForm.controls.last_name.valid"
+          *ngFor="#e of userForm.controls.last_name.errors | fieldErrors: 'Last Name'" >
+      {{e}}
+    </span>
   </div>
 
-  <div class="form-group">
-    <label for="email_field">Email</label>
+  <div class="form-group" [ngClass]="{'has-danger': !userForm.controls.email.valid}" >
+    <label class="form-control-label" for="email_field">Email</label>
     <input type="email" class="form-control" placeholder="Email" id="email_field"
            ngControl="email" >
+
+    <span class="text-help" *ngIf="!userForm.controls.email.valid"
+          *ngFor="#e of userForm.controls.email.errors | fieldErrors: 'Email'" >
+      {{e}}
+    </span>
   </div>
 
-  <div class="form-group">
-    <label for="password_field">Password</label>
+  <div class="form-group" [ngClass]="{'has-danger': !userForm.controls.password.valid}" >
+    <label class="form-control-label" for="password_field">Password</label>
     <input type="password" class="form-control" placeholder="Password" id="password_field"
            ngControl="password" >
+
+    <span class="text-help" *ngIf="!userForm.controls.password.valid"
+          *ngFor="#e of userForm.controls.password.errors | fieldErrors: 'Password'" >
+      {{e}}
+    </span>
   </div>
 
-  <button type="submit" class="btn btn-default">Submit</button>
+  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
