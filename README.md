@@ -1,7 +1,7 @@
 
 # How to start
 
-[![Angular 2 Seed Project](https://github.com/mgechev/angular2-seed)
+[Angular 2 Seed Project](https://github.com/mgechev/angular2-seed)
 
 **Note** that this seed project requires node v4.x.x or higher and npm 2.14.7.
 

@@ -1,14 +1,11 @@
 import {Component, Input} from 'angular2/core';
 import {Http, Response} from 'angular2/http';
 import {Router} from 'angular2/router';
+import {ControlGroup, FormBuilder, Validators, NgClass} from 'angular2/common';
 import {User} from '../../models/user';
-import {ControlGroup, FormBuilder, Validators, NgClass, Control} from 'angular2/common';
 import {AppValidators} from '../../validators';
+import {ControlGroupHelper} from '../ControlGroupHelper';
 
-
-// https://github.com/Paldom/angular2-rest/blob/master/angular2-rest.ts
-// https://auth0.com/blog/2015/10/15/angular-2-series-part-3-using-http/
-// http://blog.thoughtram.io/angular/2015/05/18/dependency-injection-in-angular-2.html
 
 @Component({
   selector: 'user-form',
@@ -49,10 +46,7 @@ export class UserFormComponent {
   set model (user: User) {
     if (user) {
       this.user = user;
-      (<Control>this.userForm.controls['first_name']).updateValue(this.user.first_name, true);
-      (<Control>this.userForm.controls['last_name']).updateValue(this.user.last_name, true);
-      (<Control>this.userForm.controls['email']).updateValue(this.user.email, true);
-      (<Control>this.userForm.controls['password']).updateValue(this.user.password, true);
+      ControlGroupHelper.updateControls(this.userForm, this.user);
     }
   }
 
@@ -62,18 +56,12 @@ export class UserFormComponent {
       return ;
     }
 
-    // @todo add helper class to exchange data between ControlGroup and UserModel
-    var userData = {
-      first_name: this.userForm.controls['first_name'].value,
-      last_name: this.userForm.controls['last_name'].value,
-      email: this.userForm.controls['email'].value,
-      password: this.userForm.controls['password'].value,
-    };
+    this.user.attributes = this.userForm.value;
 
-    console.log(userData);
+    console.log(this.user);
 
     if (this.user.id) {
-      this.http.put('/users/' + this.user.id, JSON.stringify({user: userData}))
+      this.http.put('/users/' + this.user.id, JSON.stringify({user: this.user}))
         .map(res => res.json())
         .subscribe(
           (data) => {
@@ -82,7 +70,7 @@ export class UserFormComponent {
           this.handleError
         );
     } else {
-      this.http.post('/users', JSON.stringify({user: userData}))
+      this.http.post('/users', JSON.stringify({user: this.user}))
         .map(res => res.json())
         .subscribe(
           (data) => {
